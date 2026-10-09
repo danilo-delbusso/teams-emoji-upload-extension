@@ -10,7 +10,7 @@ A Chrome extension for managing your organisation's custom emojis in Microsoft T
 - **Browse and delete** your organisation's custom emojis, with search and an "only mine" filter.
 - **Safe deletes**: every delete asks for confirmation and lists what will go, and large deletes are paced to Teams' rate limit.
 - **Keeps your work**: the file list and running uploads survive closing the panel.
-- **Refresh Teams** after uploading so new emojis appear, without signing you out.
+- **Refresh Teams** with one click so new emojis appear, without signing you out.
 - **Light and dark themes** in Teams' default colours.
 
 ## Documentation

@@ -23,7 +23,6 @@ import {
 } from "./types";
 
 type StatusType = "ready" | "success" | "error" | "processing";
-type AfterUpload = "refresh" | "reset" | "none";
 
 // Teams web is served from both domains depending on the tenant
 const TEAMS_ORIGINS: [string, ...string[]] = [
@@ -135,18 +134,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     updateControls();
   } catch (err) {
     console.error("Error restoring state:", err);
-  }
-
-  try {
-    const { afterUpload } = await chrome.storage.sync.get<{
-      afterUpload?: AfterUpload;
-    }>("afterUpload");
-    if (afterUpload) {
-      (document.getElementById("afterUpload") as HTMLSelectElement).value =
-        afterUpload;
-    }
-  } catch (err) {
-    console.error("Error loading settings:", err);
   }
 
   await captureTokens();
@@ -561,20 +548,12 @@ async function handleFileProcessing() {
     if (error) {
       updateStatus(error, "error");
     } else {
-      updateStatus(status || "", success ? "success" : "processing");
-
-      const afterUpload = (
-        document.getElementById("afterUpload") as HTMLSelectElement
-      ).value as AfterUpload;
-      if (afterUpload !== "none") {
-        await clearTeamsData(afterUpload);
-        updateStatus(
-          afterUpload === "reset"
-            ? `${status}. Teams was reset, so sign in again.`
-            : `${status}. Teams is reloading.`,
-          "success",
-        );
-      }
+      updateStatus(
+        success
+          ? `${status}. If they don't show up in Teams, use Refresh Teams below.`
+          : status || "",
+        success ? "success" : "processing",
+      );
     }
   } catch (error) {
     let errorMessage = "";
@@ -766,10 +745,6 @@ document
 document
   .getElementById("resetButton")
   ?.addEventListener("click", () => refreshTeams("reset"));
-document.getElementById("afterUpload")?.addEventListener("change", (event) => {
-  const afterUpload = (event.target as HTMLSelectElement).value;
-  chrome.storage.sync.set({ afterUpload });
-});
 
 chrome.runtime.onMessage.addListener(
   (message: {

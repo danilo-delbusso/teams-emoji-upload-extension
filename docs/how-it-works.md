@@ -10,10 +10,10 @@ The extension uses the same internal Teams web APIs that Teams itself calls. The
 
 ## Permissions
 
-| Permission                           | Used for                                                      |
-| ------------------------------------ | ------------------------------------------------------------- |
-| `activeTab`, `scripting`             | Reading the Teams sign-in tokens from the Teams tab           |
-| `storage`, `unlimitedStorage`        | Keeping the file list and settings while the panel is closed  |
-| `sidePanel`                          | Showing the extension next to Teams                           |
-| `browsingData`                       | Refreshing or resetting Teams' site data so new emojis appear |
-| Teams and `asyncgw` host permissions | Calling the Teams APIs listed above                           |
+| Permission                           | Used for                                                        |
+| ------------------------------------ | --------------------------------------------------------------- |
+| `activeTab`, `scripting`             | Reading the Teams sign-in tokens from the Teams tab             |
+| `storage`, `unlimitedStorage`        | Keeping the file list and upload progress when the panel closes |
+| `sidePanel`                          | Showing the extension next to Teams                             |
+| `browsingData`                       | Refreshing or resetting Teams' site data so new emojis appear   |
+| Teams and `asyncgw` host permissions | Calling the Teams APIs listed above                             |

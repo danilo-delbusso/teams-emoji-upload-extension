@@ -24,7 +24,7 @@ Teams allows each user 10 deletions per minute. Bigger deletes pause with a coun
 
 Teams caches its emoji list, so new or deleted emojis may not show up straight away.
 
-- **After upload** chooses what happens after a successful upload: refresh Teams' caches (you stay signed in), a full reset (signs you out), or nothing.
-- **Refresh Teams** and **Full reset** at the bottom of the panel do the same on demand.
+- **Refresh Teams** at the bottom of the panel clears Teams' caches and reloads it. You stay signed in.
+- **Full reset** clears all of Teams' site data, which signs you out. Use it if a refresh isn't enough.
 
 Teams can also take a while to sync changes on its side.
