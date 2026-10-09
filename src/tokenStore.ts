@@ -10,6 +10,10 @@ class TokenStore {
       const items = await chrome.storage.local.get(null); // Get all items
 
       for (const [key, value] of Object.entries(items)) {
+        // Storage also holds the popup's draft files, which are not JSON
+        if (!key.includes("chatsvcagg") && !key.includes("ic3.teams.office")) {
+          continue;
+        }
         try {
           const obj = typeof value === "string" ? JSON.parse(value) : value;
 

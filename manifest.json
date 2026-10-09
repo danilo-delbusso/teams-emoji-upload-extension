@@ -8,10 +8,18 @@
     "48": "icons/star-struck_cat48.png",
     "128": "icons/star-struck_cat.png"
   },
-  "permissions": ["activeTab", "scripting", "storage", "browsingData"],
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "unlimitedStorage",
+    "sidePanel",
+    "browsingData"
+  ],
   "host_permissions": [
     "https://teams.microsoft.com/*",
     "https://teams.microsoft.com/v2/*",
+    "https://teams.cloud.microsoft/*",
     "https://as-prod.asyncgw.teams.microsoft.com/*"
   ],
   "background": {
@@ -21,6 +29,9 @@
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
   "action": {
-    "default_popup": "popup.html"
+    "default_title": "Open Teams Emoji Uploader"
+  },
+  "side_panel": {
+    "default_path": "popup.html"
   }
 }
