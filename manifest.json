@@ -18,25 +18,9 @@
     "service_worker": "dist/background.js"
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self' ; object-src 'self'",
-    "sandbox": "sandbox allow-scripts allow-forms allow-popups allow-modals; script-src 'self' 'unsafe-inline' 'unsafe-eval'; child-src 'self';"
+    "extension_pages": "script-src 'self'; object-src 'self'"
   },
   "action": {
     "default_popup": "popup.html"
-  },
-  "content_scripts": [
-    {
-      "matches": [
-        "https://teams.microsoft.com/*",
-        "https://teams.microsoft.com/v2/*"
-      ],
-      "js": ["dist/popup.js"]
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": ["dist/popup.js"],
-      "matches": ["https://*.microsoft.com/*"]
-    }
-  ]
+  }
 }

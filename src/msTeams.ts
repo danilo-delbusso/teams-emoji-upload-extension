@@ -53,9 +53,8 @@ class MsTeamsClient {
     msCv: string,
     file: FileDetails,
   ): Promise<void> {
-    console.log("Uploading file content", file);
+    console.log("Uploading file content", file.name);
     var buf = Buffer.from(file.base64, "base64");
-    console.log("Buffer", buf);
     const response = await fetch(
       `https://as-prod.asyncgw.teams.microsoft.com/v1/objects/${documentId}/content/imgpsh`,
       {
@@ -116,15 +115,11 @@ class MsTeamsClient {
   }
 
   public async uploadFile(file: FileDetails): Promise<void> {
-    try {
-      const shortcut = `${file.name.split(".")[0]}`;
-      const { id: documentId, msCv } = await this.createObject();
-      console.log("Document ID:", documentId);
-      await this.uploadFileContent(documentId, msCv, file);
-      await this.sendMetadata(documentId, msCv, [shortcut]);
-    } catch (error) {
-      console.error("Error uploading file:", error);
-    }
+    const shortcut = `${file.name.split(".")[0]}`;
+    const { id: documentId, msCv } = await this.createObject();
+    console.log("Document ID:", documentId);
+    await this.uploadFileContent(documentId, msCv, file);
+    await this.sendMetadata(documentId, msCv, [shortcut]);
   }
 
   public async uploadFiles(
@@ -134,8 +129,22 @@ class MsTeamsClient {
       return { success: false, error: "Please select files first" };
     }
 
+    const failures: string[] = [];
     for (const file of files) {
-      await this.uploadFile(file);
+      try {
+        await this.uploadFile(file);
+      } catch (error) {
+        console.error("Error uploading file:", file.name, error);
+        const reason = error instanceof Error ? error.message : String(error);
+        failures.push(`${file.name}: ${reason}`);
+      }
+    }
+
+    if (failures.length > 0) {
+      return {
+        success: false,
+        error: `Failed to upload ${failures.length} of ${files.length} emojis:\n${failures.join("\n")}`,
+      };
     }
 
     return { success: true, status: "Your emojis have been uploaded" };

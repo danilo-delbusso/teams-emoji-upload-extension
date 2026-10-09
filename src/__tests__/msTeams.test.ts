@@ -191,10 +191,7 @@ describe("MsTeamsClient", () => {
       );
     });
 
-    it("should handle errors during upload", async () => {
-      const consoleSpy = jest
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
+    it("should propagate errors during upload", async () => {
       const error = new Error("Upload failed");
       // Mock createObject to throw an error
       // @ts-ignore - replacing private method for testing
@@ -207,10 +204,9 @@ describe("MsTeamsClient", () => {
         base64: "dGVzdA==",
       };
 
-      await client.uploadFile(mockFile);
-
-      expect(consoleSpy).toHaveBeenCalledWith("Error uploading file:", error);
-      consoleSpy.mockRestore();
+      await expect(client.uploadFile(mockFile)).rejects.toThrow(
+        "Upload failed",
+      );
     });
   });
 
@@ -254,6 +250,42 @@ describe("MsTeamsClient", () => {
       });
 
       uploadFileSpy.mockRestore();
+    });
+
+    it("should report failed files and continue with the rest", async () => {
+      const consoleSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+      const uploadFileSpy = jest
+        .spyOn(client, "uploadFile")
+        .mockRejectedValueOnce(new Error("Upload failed"))
+        .mockResolvedValueOnce();
+
+      const mockFiles: FileDetails[] = [
+        {
+          name: "test1.png",
+          size: 1024,
+          type: "image/png",
+          base64: "dGVzdA==",
+        },
+        {
+          name: "test2.png",
+          size: 2048,
+          type: "image/png",
+          base64: "dGVzdA==",
+        },
+      ];
+
+      const result = await client.uploadFiles(mockFiles);
+
+      expect(uploadFileSpy).toHaveBeenCalledTimes(2);
+      expect(result).toEqual({
+        success: false,
+        error: "Failed to upload 1 of 2 emojis:\ntest1.png: Upload failed",
+      });
+
+      uploadFileSpy.mockRestore();
+      consoleSpy.mockRestore();
     });
   });
 });
