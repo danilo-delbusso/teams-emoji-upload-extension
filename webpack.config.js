@@ -27,14 +27,6 @@ module.exports = {
       buffer: require.resolve("buffer/"),
     },
   },
-  optimization: {
-    splitChunks: {
-      name: "vendor",
-      chunks(chunk) {
-        return chunk.name !== "background";
-      },
-    },
-  },
   module: {
     rules: [
       {

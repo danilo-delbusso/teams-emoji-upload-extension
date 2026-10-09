@@ -107,7 +107,10 @@ describe("Background Script", () => {
         "chat-token",
         "permissions-id",
       );
-      expect(mockUploadFiles).toHaveBeenCalledWith(expect.any(Array));
+      expect(mockUploadFiles).toHaveBeenCalledWith(
+        expect.any(Array),
+        expect.any(Function),
+      );
       expect(result).toEqual({
         success: true,
         status:
@@ -128,6 +131,55 @@ describe("Background Script", () => {
           type: "success",
         },
       });
+    });
+
+    it("should store and publish per-file progress", async () => {
+      MsTeamsClient.mockImplementation(() => ({
+        uploadFiles: jest.fn(async (_files, onProgress) => {
+          onProgress({ index: 0, state: "uploading", step: 2 });
+          onProgress({ index: 0, state: "error", step: 0, error: "Bad image" });
+          return { success: false, error: "Failed" };
+        }),
+      }));
+
+      // Snapshot each call, since the progress array is updated in place
+      const published: unknown[] = [];
+      (chrome.runtime.sendMessage as jest.Mock).mockImplementation((msg) => {
+        if (msg.type === "uploadProgress") {
+          published.push(JSON.parse(JSON.stringify(msg.progress)));
+        }
+      });
+
+      await handleFileProcessing(
+        [
+          {
+            name: "test.png",
+            size: 1024,
+            type: "image/png",
+            base64: "dGVzdA==",
+            shortcut: "party",
+          },
+        ],
+        { chatsvcagg: "chat", ic3: "ic3", permissionsId: "perm" },
+      );
+
+      expect(published).toEqual([
+        [{ name: "test.png", shortcut: "party", state: "pending", step: 0 }],
+        [{ name: "test.png", shortcut: "party", state: "uploading", step: 2 }],
+        [
+          {
+            name: "test.png",
+            shortcut: "party",
+            state: "error",
+            step: 0,
+            error: "Bad image",
+          },
+        ],
+      ]);
+      expect(chrome.storage.local.set).toHaveBeenCalledWith({
+        uploadProgress: expect.any(Array),
+      });
+      (chrome.runtime.sendMessage as jest.Mock).mockReset();
     });
 
     it("should handle missing tokens", async () => {

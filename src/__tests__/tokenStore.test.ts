@@ -49,6 +49,25 @@ describe("TokenStore", () => {
       expect(tokens.permissionsId).toBe("permissions-id");
     });
 
+    it("should ignore non-token keys such as draft files", async () => {
+      const mockItems = {
+        "draftFile:1": "iVBORw0KGgo=",
+        "chatsvcagg-key": { secret: "chat-token" },
+      };
+      window.chrome = {
+        storage: {
+          local: { get: jest.fn().mockResolvedValue(mockItems) },
+        },
+      } as any;
+      const consoleSpy = jest.spyOn(console, "error").mockImplementation();
+
+      const tokens = await TokenStore.collectTokensFromStorage();
+
+      expect(tokens.chatsvcagg).toBe("chat-token");
+      expect(consoleSpy).not.toHaveBeenCalled();
+      consoleSpy.mockRestore();
+    });
+
     it("should handle errors when collecting tokens", async () => {
       // Mock chrome.storage.local.get to throw an error
       window.chrome = {

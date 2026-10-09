@@ -1,61 +1,29 @@
-# 🎨 Teams Emoji Upload Extension
+# Teams Emoji Uploader
 
-> Effortlessly bulk upload custom emojis to your Microsoft Teams organization with just a few clicks!
+A Chrome extension for managing your organisation's custom emojis in Microsoft Teams on the web. It opens as a side panel next to Teams, where you can upload emojis in bulk, rename them before they go up, and browse or delete existing ones.
 
-![Screenshot](./readme/screenshot.png)
+![Uploading, browsing and deleting custom emojis in the side panel](./docs/images/hero.png)
 
-## ✨ Features
+## Features
 
-- Bulk upload multiple emoji files simultaneously
-- Works via Teams in the browser
+- **Bulk upload** with previews, editable names, and progress for each file. Up to 10 upload at once, and failed ones can be renamed and retried.
+- **Browse and delete** your organisation's custom emojis, with search and an "only mine" filter.
+- **Safe deletes**: every delete asks for confirmation and lists what will go, and large deletes are paced to Teams' rate limit.
+- **Keeps your work**: the file list and running uploads survive closing the panel.
+- **Refresh Teams** after uploading so new emojis appear, without signing you out.
+- **Light and dark themes** in Teams' default colours.
 
-## 📋 Prerequisites
+## Documentation
 
-- Active Microsoft Teams tab in Chrome
+- [Installation](./docs/installation.md)
+- [Usage](./docs/usage.md)
+- [How it works](./docs/how-it-works.md): Teams endpoints and permissions
+- [Development](./docs/development.md)
 
-## 🚀 Installation
+## Contributing
 
-### From Chrome Web Store
+Contributions are welcome. Please open a pull request.
 
-Download [Teams Emoji Uploader](https://chromewebstore.google.com/detail/teams-emoji-uploader/mlajagdepghhbclefnmcdnjfhfdmoofo) from the Chrome Web Store
-
-### From Source
-
-1. Clone this repository
-2. Install dependencies and build:
-
-```console
-npm install
-npm run build
-npm test
-```
-
-3. Open Chrome and navigate to `chrome://extensions`
-4. Enable "Developer Mode" in the top right
-5. Click "Load Unpacked" and select this repository folder
-
-![Unpack Instructions](./readme/unpack.png)
-
-> 💡 **Tip**: After making changes, rebuild the project and refresh the extension in Chrome
-
-## 🛠️ Development
-
-### Formatting Code
-
-```console
-npm run format
-```
-
-### Running Tests
-
-```console
-npm test
-```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📄 License
+## License
 
 [MIT License](LICENSE)

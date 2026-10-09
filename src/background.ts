@@ -1,16 +1,34 @@
 import MsTeamsClient from "./msTeams";
-import { ProcessResult, FileDetails } from "./types";
+import { ProcessResult, FileDetails, UploadProgressItem } from "./types";
+
+// Open the side panel from the toolbar icon (absent in unit tests)
+chrome.sidePanel
+  ?.setPanelBehavior({ openPanelOnActionClick: true })
+  .catch((error) => console.error(error));
+
+// Lets a reopened popup tell a running upload from one cut short by a worker restart
+let uploadInProgress = false;
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "getUploadStatus") {
+    sendResponse({ uploading: uploadInProgress });
+    return;
+  }
+
   if (message.action === "processFiles") {
     const files = JSON.parse(message.files) as FileDetails[];
     // Set initial processing state
     chrome.storage.local.set({
       processingState: { status: "Processing...", type: "processing" },
     });
+    uploadInProgress = true;
     handleFileProcessing(files, message.tokens)
-      .then(sendResponse)
+      .then((result) => {
+        uploadInProgress = false;
+        sendResponse(result);
+      })
       .catch((error) => {
+        uploadInProgress = false;
         const errorMessage = formatErrorMessage(error);
         // Store error state
         chrome.storage.local.set({
@@ -21,6 +39,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 });
+
+// The popup may be closed, in which case nobody receives the message
+function notifyPopup(message: object) {
+  chrome.runtime.sendMessage(message)?.catch(() => {});
+}
 
 export function formatErrorMessage(error: any): string {
   // If it's a standard error object
@@ -73,7 +96,24 @@ export async function handleFileProcessing(
       tokens.chatsvcagg,
       tokens.permissionsId,
     );
-    const result = await teams.uploadFiles(files);
+    const progress: UploadProgressItem[] = files.map((file) => ({
+      name: file.name,
+      shortcut: file.shortcut || file.name.split(".")[0],
+      state: "pending",
+      step: 0,
+    }));
+    const publishProgress = () => {
+      // Persist so the popup can show progress again if it is reopened
+      chrome.storage.local.set({ uploadProgress: progress });
+      notifyPopup({ type: "uploadProgress", progress });
+    };
+    publishProgress();
+
+    const result = await teams.uploadFiles(files, (update) => {
+      const { index, ...rest } = update;
+      progress[index] = { ...progress[index], error: undefined, ...rest };
+      publishProgress();
+    });
 
     // Store processing result state
     chrome.storage.local.set({

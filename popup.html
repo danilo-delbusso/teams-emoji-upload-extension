@@ -1,18 +1,136 @@
 <!doctype html>
 <html>
   <head>
-    <link
-      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.css"
-      rel="stylesheet"
-    />
+    <meta charset="utf-8" />
+    <title>Teams Emoji Uploader</title>
     <style>
+      /* Teams' default palette (Fluent UI Teams light and dark themes) */
+      :root {
+        color-scheme: light;
+        --bg-page: #f5f5f5;
+        --bg-card: #ffffff;
+        --bg-control: #ffffff;
+        --bg-control-hover: #f5f5f5;
+        --bg-input: #ffffff;
+        --bg-placeholder: #ebebeb;
+        --bg-subtle-hover: #f0f0f0;
+        --bg-secondary: #ebebeb;
+        --bg-secondary-hover: #e0e0e0;
+        --bg-status: #ffffff;
+        --bg-dialog: #ffffff;
+        --bg-inset: #f5f5f5;
+        --stroke: #d1d1d1;
+        --stroke-hover: #c7c7c7;
+        --stroke-subtle: #e0e0e0;
+        --fg1: #242424;
+        --fg2: #424242;
+        --fg3: #616161;
+        --fg-on-brand: #ffffff;
+        --brand: #5b5fc7;
+        --brand-hover: #4f52b2;
+        --brand-stroke: #5b5fc7;
+        --brand-selected-bg: #e8ebfa;
+        --danger: #c4314b;
+        --danger-hover: #a72037;
+        --danger-fg: #c4314b;
+        --danger-fg-soft: #a72037;
+        --danger-bg-subtle: #fcf4f6;
+        --success-fg: #237b4b;
+        --success-bg: #e7f2da;
+        --progress-fg: #5b5fc7;
+        --progress-bg: #e8ebfa;
+        --info-fg: #424242;
+        --info-bg: #ffffff;
+        --backdrop: rgba(0, 0, 0, 0.4);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          color-scheme: dark;
+          --bg-page: #292929;
+          --bg-card: #333333;
+          --bg-control: #3d3d3d;
+          --bg-control-hover: #474747;
+          --bg-input: #1f1f1f;
+          --bg-placeholder: #3d3d3d;
+          --bg-subtle-hover: #383838;
+          --bg-secondary: #3d3d3d;
+          --bg-secondary-hover: #474747;
+          --bg-status: #333333;
+          --bg-dialog: #292929;
+          --bg-inset: #1f1f1f;
+          --stroke: #666666;
+          --stroke-hover: #757575;
+          --stroke-subtle: #3d3d3d;
+          --fg1: #ffffff;
+          --fg2: #d6d6d6;
+          --fg3: #adadad;
+          --fg-on-brand: #ffffff;
+          --brand: #4f52b2;
+          --brand-hover: #5b5fc7;
+          --brand-stroke: #7f85f5;
+          --brand-selected-bg: #2f2f4a;
+          --danger: #c4314b;
+          --danger-hover: #d13438;
+          --danger-fg: #e37d80;
+          --danger-fg-soft: #f1bbbc;
+          --danger-bg-subtle: #3e1f25;
+          --success-fg: #92c353;
+          --success-bg: #233118;
+          --progress-fg: #7f85f5;
+          --progress-bg: #2f2f4a;
+          --info-fg: #d6d6d6;
+          --info-bg: #333333;
+          --backdrop: rgba(0, 0, 0, 0.6);
+        }
+      }
+
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --bg-page: #292929;
+        --bg-card: #333333;
+        --bg-control: #3d3d3d;
+        --bg-control-hover: #474747;
+        --bg-input: #1f1f1f;
+        --bg-placeholder: #3d3d3d;
+        --bg-subtle-hover: #383838;
+        --bg-secondary: #3d3d3d;
+        --bg-secondary-hover: #474747;
+        --bg-status: #333333;
+        --bg-dialog: #292929;
+        --bg-inset: #1f1f1f;
+        --stroke: #666666;
+        --stroke-hover: #757575;
+        --stroke-subtle: #3d3d3d;
+        --fg1: #ffffff;
+        --fg2: #d6d6d6;
+        --fg3: #adadad;
+        --fg-on-brand: #ffffff;
+        --brand: #4f52b2;
+        --brand-hover: #5b5fc7;
+        --brand-stroke: #7f85f5;
+        --brand-selected-bg: #2f2f4a;
+        --danger: #c4314b;
+        --danger-hover: #d13438;
+        --danger-fg: #e37d80;
+        --danger-fg-soft: #f1bbbc;
+        --danger-bg-subtle: #3e1f25;
+        --success-fg: #92c353;
+        --success-bg: #233118;
+        --progress-fg: #7f85f5;
+        --progress-bg: #2f2f4a;
+        --info-fg: #d6d6d6;
+        --info-bg: #333333;
+        --backdrop: rgba(0, 0, 0, 0.6);
+      }
+
       body {
-        width: 320px;
+        min-width: 280px;
         padding: 16px;
         margin: 0;
         font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        background: #292929;
-        color: #fff;
+        background: var(--bg-page);
+        color: var(--fg1);
       }
 
       .button-container {
@@ -30,25 +148,222 @@
         align-items: center;
         gap: 8px;
         padding: 8px 16px;
-        background: #424242;
-        border: 1px solid #605e5c;
+        background: var(--bg-control);
+        border: 1px solid var(--stroke);
         border-radius: 4px;
-        color: #fff;
+        color: var(--fg1);
         cursor: pointer;
         font-size: 14px;
         transition: all 0.2s ease;
       }
 
       .file-upload-label:hover {
-        background: #484848;
-        border-color: #757575;
+        background: var(--bg-control-hover);
+        border-color: var(--stroke-hover);
+      }
+
+      .file-upload-label.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      .file-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .file-list:empty {
+        display: none;
+      }
+
+      .file-item {
+        display: grid;
+        grid-template-columns: 36px 1fr auto;
+        column-gap: 10px;
+        row-gap: 3px;
+        align-items: center;
+        padding: 6px 8px;
+        background: var(--bg-card);
+        border: 1px solid var(--stroke-subtle);
+        border-radius: 4px;
+      }
+
+      .file-preview {
+        grid-row: 1 / 3;
+        width: 36px;
+        height: 36px;
+        object-fit: contain;
+        border-radius: 4px;
+        background: var(--bg-placeholder);
+      }
+
+      .file-name-field {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        min-width: 0;
+        color: var(--fg3);
+        font-size: 13px;
+      }
+
+      .file-name-field input {
+        flex: 1;
+        min-width: 0;
+        padding: 3px 6px;
+        background: var(--bg-input);
+        border: 1px solid var(--stroke);
+        border-radius: 3px;
+        color: var(--fg1);
+        font: inherit;
+      }
+
+      .file-name-field input:focus {
+        outline: none;
+        border-color: var(--brand-stroke);
+      }
+
+      .file-name-field input.invalid {
+        border-color: var(--danger-fg);
+      }
+
+      .file-name-field input:disabled {
+        flex: 0 1 auto;
+        field-sizing: content;
+        border-color: transparent;
+        background: transparent;
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      button.file-remove {
+        padding: 4px;
+        background: transparent;
+        color: var(--fg3);
+      }
+
+      button.file-remove:hover {
+        color: var(--fg1);
+        background: var(--bg-subtle-hover);
+      }
+
+      button.file-remove[hidden] {
+        display: none;
+      }
+
+      .file-meta {
+        grid-column: 2 / 4;
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 11px;
+        color: var(--fg3);
+      }
+
+      .file-original {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .file-meta span:last-child {
+        flex-shrink: 0;
+      }
+
+      .file-state-uploading,
+      .file-state-pending {
+        color: var(--progress-fg);
+      }
+
+      .file-state-done {
+        color: var(--success-fg);
+      }
+
+      .file-state-error,
+      .file-message {
+        color: var(--danger-fg);
+      }
+
+      .file-message {
+        grid-column: 2 / 4;
+        font-size: 11px;
+        word-break: break-word;
+      }
+
+      .file-message:empty {
+        display: none;
+      }
+
+      .file-progress {
+        grid-column: 1 / 4;
+        height: 3px;
+        margin-top: 3px;
+        background: var(--bg-placeholder);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+
+      .file-progress[hidden] {
+        display: none;
+      }
+
+      .file-progress-bar {
+        height: 100%;
+        width: 0;
+        background: var(--progress-fg);
+        transition: width 0.3s ease;
+      }
+
+      .file-progress-bar.done {
+        background: var(--success-fg);
+      }
+
+      .file-progress-bar.error {
+        background: var(--danger-fg);
+      }
+
+      #processButton:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+
+      .list-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: -8px;
+        margin-left: 16px;
       }
 
       .selected-files {
         font-size: 12px;
-        color: #c8c8c8;
-        margin-top: -8px;
-        margin-left: 16px;
+        color: var(--fg2);
+      }
+
+      .list-actions {
+        display: flex;
+        gap: 2px;
+      }
+
+      button.link-button {
+        padding: 2px 6px;
+        background: transparent;
+        color: var(--fg3);
+        font-size: 12px;
+        font-weight: normal;
+      }
+
+      button.link-button:hover {
+        color: var(--fg1);
+        background: var(--bg-subtle-hover);
+      }
+
+      button.link-button[hidden] {
+        display: none;
       }
 
       button {
@@ -65,21 +380,21 @@
       }
 
       #processButton {
-        background: #6264a7;
-        color: #fff;
+        background: var(--brand);
+        color: var(--fg-on-brand);
       }
 
       #processButton:hover {
-        background: #7174b4;
+        background: var(--brand-hover);
       }
 
       #testButton {
-        background: #484848;
-        color: #fff;
+        background: var(--bg-secondary);
+        color: var(--fg-on-brand);
       }
 
       #testButton:hover {
-        background: #535353;
+        background: var(--bg-secondary-hover);
       }
 
       #status {
@@ -87,57 +402,441 @@
         padding: 12px;
         min-height: 20px;
         font-size: 13px;
-        color: #c8c8c8;
+        color: var(--fg2);
         border-radius: 4px;
-        background: #404040;
+        background: var(--bg-status);
         display: flex;
         align-items: flex-start;
         gap: 8px;
-        max-height: 200px;
+        max-height: 30vh;
         overflow-y: auto;
         word-break: break-word;
         white-space: pre-wrap;
+        /* Always in view at the bottom of the panel, however long the lists get */
+        position: sticky;
+        bottom: 12px;
+        z-index: 1;
+        border: 1px solid var(--stroke-subtle);
+        box-shadow: 0 -12px 16px var(--bg-page);
       }
 
       .status-success {
-        color: #92c353;
-        background: #2d3b21;
+        color: var(--success-fg);
+        background: var(--success-bg);
       }
 
       .status-error {
-        color: #f25c5c;
-        background: #3b2121;
+        color: var(--danger-fg);
+        background: var(--danger-bg-subtle);
       }
 
       .status-ready {
-        color: #70b5f9;
-        background: #212d3b;
+        color: var(--info-fg);
+        background: var(--info-bg);
       }
 
       .status-processing {
-        color: #f9d770;
-        background: #3b3521;
+        color: var(--progress-fg);
+        background: var(--progress-bg);
       }
 
-      #status i {
-        font-size: 14px;
+      #statusIcon {
+        display: flex;
+        flex-shrink: 0;
+      }
+
+      #statusIcon svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .spin {
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }
 
       .divider {
         height: 1px;
-        background: #484848;
+        background: var(--stroke-subtle);
         margin: 12px 0;
       }
 
       .icon {
-        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .setting {
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--fg2);
+      }
+
+      .setting select {
+        padding: 4px 6px;
+        background: var(--bg-control);
+        border: 1px solid var(--stroke);
+        border-radius: 4px;
+        color: var(--fg1);
+        font: inherit;
+      }
+
+      .refresh-help {
+        margin-top: 16px;
+        text-align: center;
+        font-size: 12px;
+        color: var(--fg3);
+      }
+
+      .refresh-actions {
+        display: flex;
+        justify-content: center;
+        gap: 4px;
+      }
+
+      .refresh-actions .subtle-button {
+        width: auto;
+        margin-top: 0;
+        padding: 6px 10px;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 16px;
+        border-bottom: 1px solid var(--stroke-subtle);
+      }
+
+      .tabs button {
+        padding: 8px 12px;
+        background: transparent;
+        color: var(--fg2);
+        border-bottom: 2px solid transparent;
+        border-radius: 0;
+      }
+
+      .tabs button:hover {
+        color: var(--fg1);
+      }
+
+      .tabs button.theme-toggle {
+        margin-left: auto;
+        padding: 6px 8px;
+        border-bottom: none;
+        color: var(--fg3);
+      }
+
+      .tabs button.theme-toggle:hover {
+        color: var(--fg1);
+      }
+
+      .tabs button[aria-selected="true"] {
+        color: var(--fg1);
+        border-bottom-color: var(--brand-stroke);
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      .browse-toolbar {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .browse-toolbar input {
+        flex: 1;
+        min-width: 0;
+        padding: 6px 8px;
+        background: var(--bg-input);
+        border: 1px solid var(--stroke);
+        border-radius: 4px;
+        color: var(--fg1);
+        font: inherit;
+        font-size: 13px;
+      }
+
+      .browse-toolbar input:focus {
+        outline: none;
+        border-color: var(--brand-stroke);
+      }
+
+      .browse-filters,
+      .selection-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+        font-size: 12px;
+        color: var(--fg2);
+      }
+
+      .browse-filters {
+        justify-content: space-between;
+      }
+
+      .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+      }
+
+      .selection-bar .danger-button {
+        margin-left: auto;
+      }
+
+      button.danger-button {
+        padding: 6px 12px;
+        background: var(--danger);
+        color: var(--fg-on-brand);
+        font-size: 13px;
+      }
+
+      button.danger-button:hover {
+        background: var(--danger-hover);
+      }
+
+      button.danger-button:disabled {
+        opacity: 0.45;
+        cursor: default;
+        background: var(--danger);
+      }
+
+      .emoji-grid {
+        list-style: none;
+        margin: 12px 0 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+        gap: 8px;
+      }
+
+      .emoji-tile {
+        position: relative;
+        background: var(--bg-card);
+        border: 1px solid var(--stroke-subtle);
+        border-radius: 4px;
+      }
+
+      .emoji-tile.selected {
+        border-color: var(--brand-stroke);
+        background: var(--brand-selected-bg);
+      }
+
+      .emoji-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 10px 6px 8px;
+        cursor: pointer;
+        min-width: 0;
+      }
+
+      .emoji-check {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        margin: 0;
+      }
+
+      .emoji-image {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+      }
+
+      .emoji-image:not([src]),
+      .emoji-image.failed {
+        background: var(--bg-placeholder);
+        border-radius: 4px;
+      }
+
+      .emoji-name {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 12px;
+        color: var(--fg1);
+      }
+
+      .emoji-meta {
+        min-height: 13px;
+        font-size: 10px;
+        color: var(--fg3);
+      }
+
+      .emoji-status {
+        display: block;
+        /* Margin, not padding, so the line clamp below cuts on a line boundary */
+        margin: 0 6px 6px;
+        font-size: 10px;
+        text-align: center;
+        word-break: break-word;
+        color: var(--progress-fg);
+      }
+
+      .emoji-status:empty {
+        display: none;
+      }
+
+      .emoji-tile.waiting,
+      .emoji-tile.deleting {
+        border-color: var(--progress-fg);
+      }
+
+      .emoji-tile.deleting .emoji-card {
+        opacity: 0.5;
+      }
+
+      .emoji-tile.failed {
+        border-color: var(--danger-fg);
+        background: var(--danger-bg-subtle);
+      }
+
+      .emoji-tile.failed .emoji-status {
+        color: var(--danger-fg);
+        /* Long server messages stay readable without stretching the grid */
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      button.emoji-delete {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        padding: 4px;
+        background: transparent;
+        color: var(--fg3);
+      }
+
+      button.emoji-delete:hover {
+        color: var(--danger-fg);
+        background: var(--danger-bg-subtle);
+      }
+
+      button.emoji-delete:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+
+      .empty-state {
+        margin: 24px 0;
+        text-align: center;
+        font-size: 13px;
+        color: var(--fg3);
+      }
+
+      #confirmDialog {
+        width: min(340px, calc(100vw - 32px));
+        padding: 20px;
+        background: var(--bg-dialog);
+        color: var(--fg1);
+        border: 1px solid var(--stroke);
+        border-radius: 8px;
+      }
+
+      #confirmDialog::backdrop {
+        background: var(--backdrop);
+      }
+
+      #confirmDialog h2 {
+        margin: 0 0 8px;
+        font-size: 16px;
+        word-break: break-word;
+      }
+
+      .confirm-warning {
+        margin: 0 0 12px;
+        font-size: 13px;
+        color: var(--danger-fg-soft);
+      }
+
+      .confirm-list {
+        list-style: none;
+        margin: 0 0 12px;
+        padding: 8px;
+        max-height: 180px;
+        overflow-y: auto;
+        background: var(--bg-inset);
+        border-radius: 4px;
+        font-size: 13px;
+      }
+
+      .confirm-list li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 2px 0;
+        word-break: break-all;
+      }
+
+      .confirm-list img {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+        object-fit: contain;
+      }
+
+      .confirm-list .confirm-more {
+        color: var(--fg3);
+      }
+
+      .confirm-typed {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 12px;
+        font-size: 13px;
+      }
+
+      .confirm-typed input {
+        padding: 6px 8px;
+        background: var(--bg-input);
+        border: 1px solid var(--stroke);
+        border-radius: 4px;
+        color: var(--fg1);
+        font: inherit;
+      }
+
+      .confirm-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      #confirmCancel {
+        background: var(--bg-secondary);
+        color: var(--fg1);
+      }
+
+      #confirmCancel:hover {
+        background: var(--bg-secondary-hover);
+      }
+
+      button:focus-visible,
+      input:focus-visible {
+        outline: 2px solid var(--brand-stroke);
+        outline-offset: 2px;
       }
 
       .subtle-button {
         background: transparent;
-        color: #c8c8c8;
+        color: var(--fg2);
         border: none;
         font-size: 12px;
         cursor: pointer;
@@ -153,38 +852,242 @@
         opacity: 1;
       }
 
-      .subtle-button i {
-        font-size: 11px;
+      .subtle-button .icon {
+        width: 11px;
+        height: 11px;
         margin-right: 4px;
+        vertical-align: -1px;
       }
     </style>
   </head>
   <body>
-    <div class="button-container">
-      <label class="file-upload-label" for="fileInput">
-        <i class="icon fas fa-paperclip"></i>
-        Choose Emoji Files
-      </label>
-      <input type="file" id="fileInput" multiple accept="image/*" />
-      <div class="selected-files" id="selectedFiles">No files selected</div>
-
-      <div class="divider"></div>
-
-      <button id="processButton">
-        <i class="icon fas fa-upload"></i>
-        Upload to Teams
+    <div class="tabs" role="tablist">
+      <button
+        id="uploadTab"
+        role="tab"
+        type="button"
+        aria-selected="true"
+        aria-controls="uploadView"
+      >
+        Upload
       </button>
+      <button
+        id="browseTab"
+        role="tab"
+        type="button"
+        aria-selected="false"
+        aria-controls="browseView"
+      >
+        Browse &amp; delete
+      </button>
+      <button
+        id="themeToggle"
+        class="theme-toggle"
+        type="button"
+        aria-label="Switch theme"
+        title="Switch theme"
+      ></button>
     </div>
 
+    <section id="uploadView" role="tabpanel" aria-labelledby="uploadTab">
+      <div class="button-container">
+        <label class="file-upload-label" id="fileInputLabel" for="fileInput">
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"
+            />
+          </svg>
+          Add Emoji Files
+        </label>
+        <input type="file" id="fileInput" multiple accept="image/*" />
+        <div class="list-header">
+          <span class="selected-files" id="selectedFiles"
+            >No files selected</span
+          >
+          <span class="list-actions">
+            <button
+              id="clearDoneButton"
+              class="link-button"
+              type="button"
+              hidden
+            >
+              Clear uploaded
+            </button>
+            <button
+              id="clearAllButton"
+              class="link-button"
+              type="button"
+              hidden
+            >
+              Clear all
+            </button>
+          </span>
+        </div>
+        <ul class="file-list" id="fileList"></ul>
+
+        <div class="divider"></div>
+
+        <button id="processButton" disabled>
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+          Upload to Teams
+        </button>
+
+        <label class="setting" for="afterUpload">
+          After upload
+          <select id="afterUpload">
+            <option value="refresh">Refresh Teams (stay signed in)</option>
+            <option value="reset">Full reset (signs you out)</option>
+            <option value="none">Do nothing</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section id="browseView" role="tabpanel" aria-labelledby="browseTab" hidden>
+      <div class="browse-toolbar">
+        <input
+          id="emojiSearch"
+          type="search"
+          placeholder="Search custom emojis"
+          aria-label="Search custom emojis"
+        />
+        <button id="reloadEmojis" class="link-button" type="button">
+          Reload
+        </button>
+      </div>
+      <div class="browse-filters">
+        <label class="checkbox-label">
+          <input id="onlyMine" type="checkbox" />
+          Only mine
+        </label>
+        <span id="emojiCount" class="selected-files"></span>
+      </div>
+      <div class="selection-bar">
+        <button id="selectShown" class="link-button" type="button">
+          Select all shown
+        </button>
+        <button id="clearSelection" class="link-button" type="button" hidden>
+          Clear selection
+        </button>
+        <button
+          id="deleteSelected"
+          class="danger-button"
+          type="button"
+          disabled
+        >
+          Delete selected
+        </button>
+      </div>
+      <ul id="emojiGrid" class="emoji-grid"></ul>
+      <p id="emojiEmpty" class="empty-state" hidden></p>
+    </section>
+
     <div id="status">
-      <i class="fas fa-circle-info"></i>
+      <span id="statusIcon"
+        ><svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" /></svg
+      ></span>
       <span id="statusText">Ready to process</span>
     </div>
 
-    <button id="resetButton" class="subtle-button">
-      <i class="icon fas fa-sync-alt"></i>
-      Can't see your new emojis? Try refreshing Teams
-    </button>
+    <div class="refresh-help">
+      Can't see your new emojis?
+      <div class="refresh-actions">
+        <button id="refreshButton" class="subtle-button" type="button">
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="23 4 23 10 17 10" />
+            <polyline points="1 20 1 14 7 14" />
+            <path
+              d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
+            />
+          </svg>
+          Refresh Teams
+        </button>
+        <button
+          id="resetButton"
+          class="subtle-button"
+          type="button"
+          title="Clears all Teams site data, including your sign-in"
+        >
+          Full reset (signs you out)
+        </button>
+      </div>
+    </div>
+
+    <dialog id="confirmDialog" aria-labelledby="confirmTitle">
+      <form method="dialog">
+        <h2 id="confirmTitle"></h2>
+        <p class="confirm-warning">
+          Deleted emojis disappear from the emoji picker for everyone in your
+          organization. This can't be undone, though you can upload the image
+          again.
+        </p>
+        <ul id="confirmList" class="confirm-list"></ul>
+        <label id="confirmTypedRow" class="confirm-typed" hidden>
+          Type <strong>delete</strong> to confirm
+          <input
+            id="confirmTyped"
+            type="text"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </label>
+        <div class="confirm-actions">
+          <button id="confirmCancel" value="cancel" type="submit">
+            Cancel
+          </button>
+          <button
+            id="confirmDelete"
+            value="delete"
+            type="submit"
+            class="danger-button"
+          >
+            Delete
+          </button>
+        </div>
+      </form>
+    </dialog>
 
     <script src="dist/popup.js"></script>
   </body>
