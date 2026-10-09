@@ -420,6 +420,25 @@
         box-shadow: 0 -12px 16px var(--bg-page);
       }
 
+      #statusText {
+        flex: 1;
+        min-width: 0;
+      }
+
+      button.status-dismiss {
+        flex-shrink: 0;
+        margin: -2px -4px -2px 0;
+        padding: 2px;
+        background: transparent;
+        color: inherit;
+        opacity: 0.7;
+      }
+
+      button.status-dismiss:hover {
+        opacity: 1;
+        background: var(--bg-subtle-hover);
+      }
+
       .status-success {
         color: var(--success-fg);
         background: var(--success-bg);
@@ -993,6 +1012,14 @@
           <line x1="12" y1="8" x2="12.01" y2="8" /></svg
       ></span>
       <span id="statusText">Ready to process</span>
+      <button
+        id="statusDismiss"
+        class="status-dismiss"
+        type="button"
+        aria-label="Dismiss message"
+        title="Dismiss"
+        hidden
+      ></button>
     </div>
 
     <div class="refresh-help">

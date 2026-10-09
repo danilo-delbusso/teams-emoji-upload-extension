@@ -205,8 +205,22 @@ function updateStatus(message: string, type: StatusType = "ready") {
 
   statusDiv.className = "status"; // Reset class
   statusDiv.classList.add(`status-${type}`);
+  statusDiv.hidden = false;
   statusIcon.innerHTML = statusIcons[type];
   statusText.textContent = message;
+  // Finished messages can be dismissed; ones for work in progress cannot
+  document.getElementById("statusDismiss")!.hidden =
+    type !== "success" && type !== "error";
+}
+
+const statusDismiss = document.getElementById("statusDismiss");
+if (statusDismiss) {
+  statusDismiss.innerHTML = removeIcon;
+  statusDismiss.addEventListener("click", () => {
+    document.getElementById("status")!.hidden = true;
+    // Forget it too, so it doesn't come back when the panel reopens
+    queueStorageWrite(() => chrome.storage.local.remove("processingState"));
+  });
 }
 
 function formatSize(bytes: number): string {
